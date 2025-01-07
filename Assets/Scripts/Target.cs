@@ -56,6 +56,7 @@ public class Target : MonoBehaviour
                 PlaySound(gameManager.chimeSound);
                 DestroyMysteryBoxObjects();
                 gameManager.TriggerGoldOverlay();
+                gameManager.UpdateScore(pointValue);
 
             }
             else
