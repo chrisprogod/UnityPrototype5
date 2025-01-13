@@ -8,9 +8,11 @@ using UnityEngine.UI;
 public class GameManagerX : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI timerText;
     public TextMeshProUGUI gameOverText;
     public GameObject titleScreen;
-    public Button restartButton; 
+    public Button restartButton;
+    public float timeleft;
 
     public List<GameObject> targetPrefabs;
 
@@ -18,10 +20,10 @@ public class GameManagerX : MonoBehaviour
     private float spawnRate = 1.5f;
     public bool isGameActive;
 
-    private float spaceBetweenSquares = 2.5f; 
+    private float spaceBetweenSquares = 2.5f;
     private float minValueX = -3.75f; //  x value of the center of the left-most square
     private float minValueY = -3.75f; //  y value of the center of the bottom-most square
-    
+
     // Start the game, remove title screen, reset score, and adjust spawnRate based on difficulty button clicked
     public void StartGame(int difficulty)
     {
@@ -30,7 +32,20 @@ public class GameManagerX : MonoBehaviour
         StartCoroutine(SpawnTarget());
         score = 0;
         UpdateScore(0);
+        timeleft = 60;
         titleScreen.SetActive(false);
+    }
+    private void Update()
+    {
+        if (isGameActive)
+        {
+            timeleft -= Time.deltaTime;
+            timerText.SetText("Time: " + Mathf.Round(timeleft));
+            if (timeleft < 0)
+            {
+                GameOver();
+            }
+        }
     }
 
     // While game is active spawn a random target
@@ -45,7 +60,7 @@ public class GameManagerX : MonoBehaviour
             {
                 Instantiate(targetPrefabs[index], RandomSpawnPosition(), targetPrefabs[index].transform.rotation);
             }
-            
+
         }
     }
 
